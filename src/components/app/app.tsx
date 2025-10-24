@@ -11,31 +11,68 @@ import {
 } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 
-import { AppHeader } from '@components';
+import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 
-const App = () => (
-  <div className={styles.app}>
-    <AppHeader />
-    <Routes>
-      <Route path='*' element={<NotFound404 />} />
-      <Route path='/' element={<ConstructorPage />} />
-      <Route path='/feed' element={<Feed />} />
-      //TODO: protect
-      <Route path='/login' element={<Login />} />
-      //TODO: protect
-      <Route path='/register' element={<Register />} />
-      // TODO: protect
-      <Route path='/forgot-password' element={<ForgotPassword />} />
-      // TODO: protect
-      <Route path='/reset-password' element={<ResetPassword />} />
-      // TODO: protect
-      <Route path='/profile' element={<Profile />} />
-      // TODO: protect
-      <Route path='/profile/orders' element={<ProfileOrders />} />
-    </Routes>
-  </div>
-);
+const App = () => {
+  let location = useLocation();
+  let state = location.state as { backgroundLocation?: Location };
+  let navigate = useNavigate();
+  const onModalClose = () => navigate(-1);
+  return (
+    <div className={styles.app}>
+      <AppHeader />
+      <Routes location={state?.backgroundLocation || location}>
+        <Route path='*' element={<NotFound404 />} />
+        <Route path='/' element={<ConstructorPage />} />
+        <Route path='/feed' element={<Feed />} />
+        //TODO: protect
+        <Route path='/login' element={<Login />} />
+        //TODO: protect
+        <Route path='/register' element={<Register />} />
+        // TODO: protect
+        <Route path='/forgot-password' element={<ForgotPassword />} />
+        // TODO: protect
+        <Route path='/reset-password' element={<ResetPassword />} />
+        // TODO: protect
+        <Route path='/profile' element={<Profile />} />
+        // TODO: protect
+        <Route path='/profile/orders' element={<ProfileOrders />} />
+      </Routes>
+
+      {state?.backgroundLocation && (
+        <Routes>
+          <Route
+            path='/feed/:number'
+            element={
+              <Modal title='Детали заказа' onClose={onModalClose}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
+          // TODO: title
+          <Route
+            path='/ingredients/:id'
+            element={
+              <Modal title='Ingredient Details' onClose={onModalClose}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+          // TODO: title + protect
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <Modal title='Order Info' onClose={onModalClose}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
+    </div>
+  );
+};
 
 export default App;
