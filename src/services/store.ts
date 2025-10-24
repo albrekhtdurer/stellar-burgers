@@ -8,9 +8,7 @@ import {
 
 import { reducer } from './rootReducer';
 
-const rootReducer = () => {
-  reducer;
-}; // Заменить на импорт настоящего редьюсера
+const rootReducer = reducer;
 
 const store = configureStore({
   reducer: rootReducer,

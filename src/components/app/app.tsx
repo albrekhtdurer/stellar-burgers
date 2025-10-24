@@ -14,12 +14,22 @@ import styles from './app.module.css';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
+import { getIngredients } from '../../services/slices/burgersSlice';
+import { useEffect } from 'react';
+import { useDispatch } from '../../services/store';
 
 const App = () => {
   let location = useLocation();
   let state = location.state as { backgroundLocation?: Location };
   let navigate = useNavigate();
   const onModalClose = () => navigate(-1);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log('getIngredients');
+    dispatch(getIngredients());
+  }, [dispatch]);
+
   return (
     <div className={styles.app}>
       <AppHeader />
