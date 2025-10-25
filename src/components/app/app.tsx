@@ -20,7 +20,7 @@ import { useDispatch } from '../../services/store';
 
 const App = () => {
   let location = useLocation();
-  let state = location.state as { backgroundLocation?: Location };
+  let state = location.state as { background?: Location };
   let navigate = useNavigate();
   const onModalClose = () => navigate(-1);
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const App = () => {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes location={state?.backgroundLocation || location}>
+      <Routes location={state?.background || location}>
         <Route path='*' element={<NotFound404 />} />
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
@@ -51,7 +51,7 @@ const App = () => {
         <Route path='/profile/orders' element={<ProfileOrders />} />
       </Routes>
 
-      {state?.backgroundLocation && (
+      {state?.background && (
         <Routes>
           <Route
             path='/feed/:number'
