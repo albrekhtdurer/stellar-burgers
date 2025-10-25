@@ -49,6 +49,22 @@ const App = () => {
         <Route path='/profile' element={<Profile />} />
         // TODO: protect
         <Route path='/profile/orders' element={<ProfileOrders />} />
+        <Route path='/feed/:number' element={<OrderInfo />} />
+        <Route
+          path='/ingredients/:id'
+          element={
+            <div className={styles.detailPageWrap}>
+              <h1
+                className={`text text_type_main-large ${styles.detailHeader}`}
+              >
+                Детали ингредиента
+              </h1>
+              <IngredientDetails />
+            </div>
+          }
+        />
+        // TODO: title + protect
+        <Route path='/profile/orders/:number' element={<OrderInfo />} />
       </Routes>
 
       {state?.background && (
@@ -61,11 +77,10 @@ const App = () => {
               </Modal>
             }
           />
-          // TODO: title
           <Route
             path='/ingredients/:id'
             element={
-              <Modal title='Ingredient Details' onClose={onModalClose}>
+              <Modal title='Детали ингредиента' onClose={onModalClose}>
                 <IngredientDetails />
               </Modal>
             }
