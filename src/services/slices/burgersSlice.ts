@@ -79,6 +79,28 @@ export const burgersSlice = createSlice({
             (b) => b.id !== action.payload.id
           );
       }
+    },
+    moveConstructorItemUp: (
+      state,
+      action: PayloadAction<TConstructorIngredient>
+    ) => {
+      const index = state.constructorItems.ingredients.findIndex(
+        (ingredient) => ingredient.id === action.payload.id
+      );
+      const temp = state.constructorItems.ingredients[index - 1];
+      state.constructorItems.ingredients[index - 1] = action.payload;
+      state.constructorItems.ingredients[index] = temp;
+    },
+    moveConstructorItemDown: (
+      state,
+      action: PayloadAction<TConstructorIngredient>
+    ) => {
+      const index = state.constructorItems.ingredients.findIndex(
+        (ingredient) => ingredient.id === action.payload.id
+      );
+      const temp = state.constructorItems.ingredients[index + 1];
+      state.constructorItems.ingredients[index + 1] = action.payload;
+      state.constructorItems.ingredients[index] = temp;
     }
   }
 });
@@ -88,5 +110,9 @@ export const {
   ingredientsSelector,
   constructorItemsSelector
 } = burgersSlice.selectors;
-export const { addConstructorItem, removeConstructorItem } =
-  burgersSlice.actions;
+export const {
+  addConstructorItem,
+  removeConstructorItem,
+  moveConstructorItemDown,
+  moveConstructorItemUp
+} = burgersSlice.actions;
