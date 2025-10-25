@@ -8,7 +8,6 @@ import { ingredientsSelector } from '../../services/slices/burgersSlice';
 
 export const BurgerIngredients: FC = () => {
   const ingredients = useSelector(ingredientsSelector);
-  /** TODO: взять переменные из стора */
   const buns =
     (ingredients &&
       ingredients.filter((ingredient) => ingredient.type === 'bun')) ||
@@ -21,9 +20,6 @@ export const BurgerIngredients: FC = () => {
     (ingredients &&
       ingredients.filter((ingredient) => ingredient.type === 'sauce')) ||
     [];
-  // const buns = [];
-  // const mains = [];
-  // const sauces = [];
 
   const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
   const titleBunRef = useRef<HTMLHeadingElement>(null);
