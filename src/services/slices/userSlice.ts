@@ -3,20 +3,27 @@ import {
   loginUserApi,
   registerUserApi,
   TLoginData,
-  TRegisterData
+  TRegisterData,
+  updateUserApi
 } from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
-import { getCookie } from '../../utils/cookie';
+import { getCookie, setCookie } from '../../utils/cookie';
 
 export const registerUser = createAsyncThunk(
   'user/register',
-  async (userData: TRegisterData) => await registerUserApi(userData)
+  async (userData: TRegisterData) => registerUserApi(userData)
 );
 
+// TODO: подумать про обработку ошибки
 export const loginUser = createAsyncThunk(
   'user/login',
-  async (userData: TLoginData) => await loginUserApi(userData)
+  async (userData: TLoginData) => {
+    const loginData = await loginUserApi(userData);
+    setCookie('accessToken', loginData.accessToken);
+    localStorage.setItem('refreshToken', loginData.refreshToken);
+    return loginData.user;
+  }
 );
 
 export const checkUserAuthentication = createAsyncThunk(
@@ -31,6 +38,11 @@ export const checkUserAuthentication = createAsyncThunk(
       dispatch(setIsAuthChecked(true));
     }
   }
+);
+
+export const updateUser = createAsyncThunk(
+  'user/update',
+  async (userData: Partial<TRegisterData>) => updateUserApi(userData)
 );
 
 type TUserState = {
@@ -69,6 +81,9 @@ export const userSlice = createSlice({
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.isAuthChecked = true;
+      state.data = action.payload;
+    });
+    builder.addCase(updateUser.fulfilled, (state, action) => {
       state.data = action.payload.user;
     });
   }
