@@ -1,6 +1,7 @@
 import {
   getUserApi,
   loginUserApi,
+  logoutApi,
   registerUserApi,
   TLoginData,
   TRegisterData,
@@ -8,7 +9,7 @@ import {
 } from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
-import { getCookie, setCookie } from '../../utils/cookie';
+import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
 
 export const registerUser = createAsyncThunk(
   'user/register',
@@ -45,18 +46,20 @@ export const updateUser = createAsyncThunk(
   async (userData: Partial<TRegisterData>) => updateUserApi(userData)
 );
 
+export const logoutUser = createAsyncThunk('user/logout', async () => {
+  await logoutApi();
+  deleteCookie('accessToken');
+  localStorage.removeItem('refreshToken');
+});
+
 type TUserState = {
   isAuthChecked: boolean;
   data: TUser | null;
-  loginUserError: string | null;
-  loginUserRequest: boolean;
 };
 
 const initialState: TUserState = {
   isAuthChecked: false,
-  data: null,
-  loginUserError: null,
-  loginUserRequest: false
+  data: null
 };
 
 export const userSlice = createSlice({
@@ -85,6 +88,10 @@ export const userSlice = createSlice({
     });
     builder.addCase(updateUser.fulfilled, (state, action) => {
       state.data = action.payload.user;
+    });
+    builder.addCase(logoutUser.fulfilled, (state) => {
+      state.isAuthChecked = false;
+      state.data = null;
     });
   }
 });
