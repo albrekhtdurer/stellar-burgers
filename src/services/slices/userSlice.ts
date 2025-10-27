@@ -90,7 +90,6 @@ export const userSlice = createSlice({
       state.data = action.payload.user;
     });
     builder.addCase(logoutUser.fulfilled, (state) => {
-      state.isAuthChecked = false;
       state.data = null;
     });
   }
