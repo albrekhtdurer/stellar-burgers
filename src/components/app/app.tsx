@@ -17,6 +17,8 @@ import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { getIngredients } from '../../services/slices/burgersSlice';
 import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
+import { checkUserAuthentication } from '../../services/slices/userSlice';
+import { ProtectedRoute } from '../protected-route/protected-route';
 
 const App = () => {
   let location = useLocation();
@@ -24,6 +26,10 @@ const App = () => {
   let navigate = useNavigate();
   const onModalClose = () => navigate(-1);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkUserAuthentication());
+  }, []);
 
   useEffect(() => {
     console.log('getIngredients');
@@ -37,18 +43,30 @@ const App = () => {
         <Route path='*' element={<NotFound404 />} />
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
-        //TODO: protect
-        <Route path='/login' element={<Login />} />
-        //TODO: protect
-        <Route path='/register' element={<Register />} />
-        // TODO: protect
-        <Route path='/forgot-password' element={<ForgotPassword />} />
-        // TODO: protect
-        <Route path='/reset-password' element={<ResetPassword />} />
-        // TODO: protect
-        <Route path='/profile' element={<Profile />} />
-        // TODO: protect
-        <Route path='/profile/orders' element={<ProfileOrders />} />
+        <Route
+          path='/login'
+          element={<ProtectedRoute forUnAuth component={<Login />} />}
+        />
+        <Route
+          path='/register'
+          element={<ProtectedRoute forUnAuth component={<Register />} />}
+        />
+        <Route
+          path='/forgot-password'
+          element={<ProtectedRoute forUnAuth component={<ForgotPassword />} />}
+        />
+        <Route
+          path='/reset-password'
+          element={<ProtectedRoute forUnAuth component={<ResetPassword />} />}
+        />
+        <Route
+          path='/profile'
+          element={<ProtectedRoute component={<Profile />} />}
+        />
+        <Route
+          path='/profile/orders'
+          element={<ProtectedRoute component={<ProfileOrders />} />}
+        />
         <Route path='/feed/:number' element={<OrderInfo />} />
         <Route
           path='/ingredients/:id'
@@ -63,8 +81,11 @@ const App = () => {
             </div>
           }
         />
-        // TODO: title + protect
-        <Route path='/profile/orders/:number' element={<OrderInfo />} />
+        // TODO: title
+        <Route
+          path='/profile/orders/:number'
+          element={<ProtectedRoute component={<OrderInfo />} />}
+        />
       </Routes>
 
       {state?.background && (
@@ -85,13 +106,16 @@ const App = () => {
               </Modal>
             }
           />
-          // TODO: title + protect
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal title='Order Info' onClose={onModalClose}>
-                <OrderInfo />
-              </Modal>
+              <ProtectedRoute
+                component={
+                  <Modal title='Детали заказа' onClose={onModalClose}>
+                    <OrderInfo />
+                  </Modal>
+                }
+              />
             }
           />
         </Routes>
