@@ -1,16 +1,6 @@
-import { getIngredientsApi } from '@api';
-import {
-  createAsyncThunk,
-  createSlice,
-  nanoid,
-  PayloadAction
-} from '@reduxjs/toolkit';
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
-
-export const getIngredients = createAsyncThunk(
-  'burgers/getIngredients',
-  async () => await getIngredientsApi()
-);
+import { getIngredients } from './actions';
 
 type TBurgersState = {
   ingredients: TIngredient[] | null;
@@ -31,8 +21,8 @@ const initialState: TBurgersState = {
   constructorItems: { bun: null, ingredients: [] }
 };
 
-export const burgersSlice = createSlice({
-  name: 'burgers',
+export const ingredientsSlice = createSlice({
+  name: 'ingredients',
   initialState,
   selectors: {
     loadingSelector: (state) => state.isLoading,
@@ -112,11 +102,11 @@ export const {
   loadingSelector,
   ingredientsSelector,
   constructorItemsSelector
-} = burgersSlice.selectors;
+} = ingredientsSlice.selectors;
 export const {
   addConstructorItem,
   removeConstructorItem,
   moveConstructorItemDown,
   moveConstructorItemUp,
   setConstructorItems
-} = burgersSlice.actions;
+} = ingredientsSlice.actions;

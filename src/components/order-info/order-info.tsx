@@ -3,10 +3,10 @@ import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useSelector } from '../../services/store';
-import { ingredientsSelector } from '../../services/slices/burgersSlice';
+import { ingredientsSelector } from '../../services/ingredients/slice';
 import { useLocation, useParams } from 'react-router-dom';
-import { ordersSelector } from '../../services/slices/ordersSlice';
-import { userOrdersSelector } from '../../services/slices/userSlice';
+import { ordersSelector } from '../../services/feeds/slice';
+import { userOrdersSelector } from '../../services/order/slice';
 
 export const OrderInfo: FC = () => {
   const { number } = useParams();

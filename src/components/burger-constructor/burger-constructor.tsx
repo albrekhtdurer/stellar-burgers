@@ -4,17 +4,16 @@ import { BurgerConstructorUI } from '@ui';
 import {
   constructorItemsSelector,
   setConstructorItems
-} from '../../services/slices/burgersSlice';
+} from '../../services/constructor/slice';
 import { useDispatch, useSelector } from '../../services/store';
-import {
-  isAuthCheckedSelector,
-  orderModalDataSelector,
-  orderRequestSelector,
-  sendUserOrder,
-  setOrderModalData,
-  userSelector
-} from '../../services/slices/userSlice';
+import { isAuthCheckedSelector, userSelector } from '../../services/user/slice';
 import { useNavigate } from 'react-router-dom';
+import {
+  orderRequestSelector,
+  orderModalDataSelector,
+  setOrderModalData
+} from '../../services/order/slice';
+import { sendOrder } from '../../services/order/actions';
 
 export const BurgerConstructor: FC = () => {
   const navigate = useNavigate();
@@ -36,7 +35,7 @@ export const BurgerConstructor: FC = () => {
     }
     const orderData = constructorItems.ingredients.map((item) => item._id);
     orderData.push(constructorItems.bun._id);
-    dispatch(sendUserOrder(orderData));
+    dispatch(sendOrder(orderData));
   };
 
   const closeOrderModal = () => {

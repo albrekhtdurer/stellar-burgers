@@ -14,12 +14,12 @@ import styles from './app.module.css';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
-import { getIngredients } from '../../services/slices/burgersSlice';
+import { getIngredients } from '../../services/ingredients/actions';
 import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
-import { checkUserAuthentication } from '../../services/slices/userSlice';
+import { checkUserAuthentication } from '../../services/user/actions';
 import { ProtectedRoute } from '../protected-route/protected-route';
-import { getFeeds } from '../../services/slices/ordersSlice';
+import { getFeeds } from '../../services/feeds/actions';
 
 const App = () => {
   const location = useLocation();
