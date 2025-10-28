@@ -34,11 +34,11 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getIngredients());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     dispatch(getFeeds());
-  }, [dispatch]);
+  }, []);
 
   return (
     <div className={styles.app}>

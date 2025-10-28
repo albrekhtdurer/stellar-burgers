@@ -9,10 +9,6 @@ export const Feed: FC = () => {
   const dispatch = useDispatch();
   const orders: TOrder[] = useSelector(ordersSelector);
 
-  if (!orders.length) {
-    return <Preloader />;
-  }
-
   const handleRefresh = () => {
     console.log('refresh');
     dispatch(getFeeds());
