@@ -101,6 +101,9 @@ export const burgersSlice = createSlice({
       const temp = state.constructorItems.ingredients[index + 1];
       state.constructorItems.ingredients[index + 1] = action.payload;
       state.constructorItems.ingredients[index] = temp;
+    },
+    setConstructorItems: (state, action: PayloadAction<TConstructorItems>) => {
+      state.constructorItems = action.payload;
     }
   }
 });
@@ -114,5 +117,6 @@ export const {
   addConstructorItem,
   removeConstructorItem,
   moveConstructorItemDown,
-  moveConstructorItemUp
+  moveConstructorItemUp,
+  setConstructorItems
 } = burgersSlice.actions;

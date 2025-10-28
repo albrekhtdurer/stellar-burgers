@@ -3,6 +3,7 @@ import {
   getUserApi,
   loginUserApi,
   logoutApi,
+  orderBurgerApi,
   registerUserApi,
   TLoginData,
   TRegisterData,
@@ -57,16 +58,25 @@ export const getUserOrders = createAsyncThunk('user/getOrders', async () =>
   getOrdersApi()
 );
 
+export const sendUserOrder = createAsyncThunk(
+  'user/sendOrder',
+  async (data: string[]) => orderBurgerApi(data)
+);
+
 type TUserState = {
   isAuthChecked: boolean;
   data: TUser | null;
   orders: TOrder[];
+  orderRequest: boolean;
+  orderModalData: TOrder | null;
 };
 
 const initialState: TUserState = {
   isAuthChecked: false,
   data: null,
-  orders: []
+  orders: [],
+  orderRequest: false,
+  orderModalData: null
 };
 
 export const userSlice = createSlice({
@@ -78,12 +88,17 @@ export const userSlice = createSlice({
     },
     setUser: (state, action: PayloadAction<TUser>) => {
       state.data = action.payload;
+    },
+    setOrderModalData: (state, action: PayloadAction<TOrder | null>) => {
+      state.orderModalData = action.payload;
     }
   },
   selectors: {
     isAuthCheckedSelector: (state) => state.isAuthChecked,
     userSelector: (state) => state.data,
-    userOrdersSelector: (state) => state.orders
+    userOrdersSelector: (state) => state.orders,
+    orderRequestSelector: (state) => state.orderRequest,
+    orderModalDataSelector: (state) => state.orderModalData
   },
   extraReducers: (builder) => {
     builder.addCase(registerUser.fulfilled, (state, action) => {
@@ -103,9 +118,26 @@ export const userSlice = createSlice({
     builder.addCase(getUserOrders.fulfilled, (state, action) => {
       state.orders = action.payload;
     });
+    builder.addCase(sendUserOrder.pending, (state) => {
+      state.orderRequest = true;
+    });
+    builder.addCase(sendUserOrder.fulfilled, (state, action) => {
+      state.orderRequest = false;
+      state.orderModalData = action.payload.order;
+    });
+    builder.addCase(sendUserOrder.rejected, (state) => {
+      state.orderRequest = false;
+      state.orderModalData = null;
+    });
   }
 });
 
-export const { setIsAuthChecked, setUser } = userSlice.actions;
-export const { isAuthCheckedSelector, userSelector, userOrdersSelector } =
-  userSlice.selectors;
+export const { setIsAuthChecked, setUser, setOrderModalData } =
+  userSlice.actions;
+export const {
+  isAuthCheckedSelector,
+  userSelector,
+  userOrdersSelector,
+  orderRequestSelector,
+  orderModalDataSelector
+} = userSlice.selectors;
