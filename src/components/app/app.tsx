@@ -19,6 +19,7 @@ import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
 import { checkUserAuthentication } from '../../services/slices/userSlice';
 import { ProtectedRoute } from '../protected-route/protected-route';
+import { getFeeds } from '../../services/slices/ordersSlice';
 
 const App = () => {
   let location = useLocation();
@@ -32,8 +33,11 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    console.log('getIngredients');
     dispatch(getIngredients());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getFeeds());
   }, [dispatch]);
 
   return (
