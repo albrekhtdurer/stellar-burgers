@@ -14,15 +14,16 @@ import {
   setOrderModalData,
   userSelector
 } from '../../services/slices/userSlice';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();  let constructorItems = useSelector(constructorItemsSelector);
+  const dispatch = useDispatch();
+  const constructorItems = useSelector(constructorItemsSelector);
 
   const orderRequest = useSelector(orderRequestSelector);
 
-  let orderModalData = useSelector(orderModalDataSelector);
+  const orderModalData = useSelector(orderModalDataSelector);
 
   const isAuthChecked = useSelector(isAuthCheckedSelector);
   const user = useSelector(userSelector);
