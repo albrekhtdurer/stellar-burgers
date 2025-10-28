@@ -2,9 +2,8 @@ import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 import { getIngredients } from './actions';
 
-type TBurgersState = {
+type TIngredientsState = {
   ingredients: TIngredient[] | null;
-  getIngredientsError: unknown;
   isLoading: boolean;
   constructorItems: TConstructorItems;
 };
@@ -14,9 +13,8 @@ type TConstructorItems = {
   ingredients: TConstructorIngredient[];
 };
 
-const initialState: TBurgersState = {
+const initialState: TIngredientsState = {
   ingredients: null,
-  getIngredientsError: null,
   isLoading: false,
   constructorItems: { bun: null, ingredients: [] }
 };
@@ -25,7 +23,7 @@ export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
   selectors: {
-    loadingSelector: (state) => state.isLoading,
+    isIngredientsLoadingSelector: (state) => state.isLoading,
     ingredientsSelector: (state) => state.ingredients,
     constructorItemsSelector: (state) => state.constructorItems
   },
@@ -36,77 +34,18 @@ export const ingredientsSlice = createSlice({
       })
       .addCase(getIngredients.rejected, (state, action) => {
         state.isLoading = false;
-        state.getIngredientsError = action.payload;
+        console.log('Произошла ошибка: ' + action.error);
       })
       .addCase(getIngredients.fulfilled, (state, action) => {
         state.isLoading = false;
         state.ingredients = action.payload;
       });
   },
-  reducers: {
-    addConstructorItem: {
-      reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
-        if (action.payload.type === 'bun') {
-          state.constructorItems.bun = { ...action.payload };
-        } else {
-          state.constructorItems.ingredients.push(action.payload);
-        }
-      },
-      prepare: (ingredient: TIngredient) => {
-        const id = nanoid();
-        return { payload: { ...ingredient, id } };
-      }
-    },
-    removeConstructorItem: (
-      state,
-      action: PayloadAction<TConstructorIngredient>
-    ) => {
-      if (action.payload.type === 'bun') {
-        state.constructorItems.bun = null;
-      } else {
-        state.constructorItems.ingredients =
-          state.constructorItems.ingredients.filter(
-            (b) => b.id !== action.payload.id
-          );
-      }
-    },
-    moveConstructorItemUp: (
-      state,
-      action: PayloadAction<TConstructorIngredient>
-    ) => {
-      const index = state.constructorItems.ingredients.findIndex(
-        (ingredient) => ingredient.id === action.payload.id
-      );
-      const temp = state.constructorItems.ingredients[index - 1];
-      state.constructorItems.ingredients[index - 1] = action.payload;
-      state.constructorItems.ingredients[index] = temp;
-    },
-    moveConstructorItemDown: (
-      state,
-      action: PayloadAction<TConstructorIngredient>
-    ) => {
-      const index = state.constructorItems.ingredients.findIndex(
-        (ingredient) => ingredient.id === action.payload.id
-      );
-      const temp = state.constructorItems.ingredients[index + 1];
-      state.constructorItems.ingredients[index + 1] = action.payload;
-      state.constructorItems.ingredients[index] = temp;
-    },
-    setConstructorItems: (state, action: PayloadAction<TConstructorItems>) => {
-      state.constructorItems = action.payload;
-    }
-  }
+  reducers: {}
 });
 
 export const {
-  loadingSelector,
+  isIngredientsLoadingSelector,
   ingredientsSelector,
   constructorItemsSelector
 } = ingredientsSlice.selectors;
-export const {
-  addConstructorItem,
-  removeConstructorItem,
-  moveConstructorItemDown,
-  moveConstructorItemUp,
-  setConstructorItems
-} = ingredientsSlice.actions;

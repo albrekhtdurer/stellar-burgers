@@ -6,12 +6,14 @@ type TFeedState = {
   orders: TOrder[];
   total: number;
   totalToday: number;
+  isLoading: boolean;
 };
 
 const initialState: TFeedState = {
   orders: [],
   total: 0,
-  totalToday: 0
+  totalToday: 0,
+  isLoading: false
 };
 
 export const feedsSlice = createSlice({
@@ -19,19 +21,32 @@ export const feedsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getFeeds.fulfilled, (state, action) => {
-      const data = action.payload;
-      state.orders = data.orders;
-      state.total = data.total;
-      state.totalToday = data.totalToday;
-    });
+    builder
+      .addCase(getFeeds.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getFeeds.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const data = action.payload;
+        state.orders = data.orders;
+        state.total = data.total;
+        state.totalToday = data.totalToday;
+      })
+      .addCase(getFeeds.rejected, (state, action) => {
+        console.log('Произошла ошибка ' + action.error);
+      });
   },
   selectors: {
+    isFeedsLoadingSelector: (state) => state.isLoading,
     ordersSelector: (state) => state.orders,
     totalSelector: (state) => state.total,
     totalTodaySelector: (state) => state.totalToday
   }
 });
 
-export const { ordersSelector, totalSelector, totalTodaySelector } =
-  feedsSlice.selectors;
+export const {
+  ordersSelector,
+  totalSelector,
+  totalTodaySelector,
+  isFeedsLoadingSelector
+} = feedsSlice.selectors;

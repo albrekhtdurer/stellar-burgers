@@ -36,6 +36,10 @@ export const userSlice = createSlice({
       state.isAuthChecked = true;
       state.data = action.payload;
     });
+    builder.addCase(loginUser.rejected, (state, action) => {
+      state.isAuthChecked = true;
+      console.log('Произошла ошибка: ' + action.error);
+    });
     builder.addCase(updateUser.fulfilled, (state, action) => {
       state.data = action.payload.user;
     });
