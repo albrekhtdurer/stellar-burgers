@@ -1,4 +1,5 @@
 import {
+  getOrdersApi,
   getUserApi,
   loginUserApi,
   logoutApi,
@@ -8,7 +9,7 @@ import {
   updateUserApi
 } from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TUser } from '@utils-types';
+import { TOrder, TUser } from '@utils-types';
 import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
 
 export const registerUser = createAsyncThunk(
@@ -52,14 +53,20 @@ export const logoutUser = createAsyncThunk('user/logout', async () => {
   localStorage.removeItem('refreshToken');
 });
 
+export const getUserOrders = createAsyncThunk('user/getOrders', async () =>
+  getOrdersApi()
+);
+
 type TUserState = {
   isAuthChecked: boolean;
   data: TUser | null;
+  orders: TOrder[];
 };
 
 const initialState: TUserState = {
   isAuthChecked: false,
-  data: null
+  data: null,
+  orders: []
 };
 
 export const userSlice = createSlice({
@@ -75,7 +82,8 @@ export const userSlice = createSlice({
   },
   selectors: {
     isAuthCheckedSelector: (state) => state.isAuthChecked,
-    userSelector: (state) => state.data
+    userSelector: (state) => state.data,
+    userOrdersSelector: (state) => state.orders
   },
   extraReducers: (builder) => {
     builder.addCase(registerUser.fulfilled, (state, action) => {
@@ -92,8 +100,12 @@ export const userSlice = createSlice({
     builder.addCase(logoutUser.fulfilled, (state) => {
       state.data = null;
     });
+    builder.addCase(getUserOrders.fulfilled, (state, action) => {
+      state.orders = action.payload;
+    });
   }
 });
 
 export const { setIsAuthChecked, setUser } = userSlice.actions;
-export const { isAuthCheckedSelector, userSelector } = userSlice.selectors;
+export const { isAuthCheckedSelector, userSelector, userOrdersSelector } =
+  userSlice.selectors;

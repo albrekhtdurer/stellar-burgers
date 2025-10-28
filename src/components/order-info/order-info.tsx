@@ -6,13 +6,14 @@ import { useSelector } from '../../services/store';
 import { ingredientsSelector } from '../../services/slices/burgersSlice';
 import { useLocation, useParams } from 'react-router-dom';
 import { ordersSelector } from '../../services/slices/ordersSlice';
+import { userOrdersSelector } from '../../services/slices/userSlice';
 
 export const OrderInfo: FC = () => {
   const { number } = useParams();
   const location = useLocation();
   const orders = /feed/.test(location.pathname)
     ? useSelector(ordersSelector)
-    : [];
+    : useSelector(userOrdersSelector);
   console.log(orders[orders.length - 1]);
   const orderData = orders.find((order) => order.number.toString() === number);
 

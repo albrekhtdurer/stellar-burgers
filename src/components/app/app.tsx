@@ -22,9 +22,9 @@ import { ProtectedRoute } from '../protected-route/protected-route';
 import { getFeeds } from '../../services/slices/ordersSlice';
 
 const App = () => {
-  let location = useLocation();
-  let state = location.state as { background?: Location };
-  let navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state as { background?: Location };
+  const navigate = useNavigate();
   const onModalClose = () => navigate(-1);
   const dispatch = useDispatch();
 
