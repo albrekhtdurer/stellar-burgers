@@ -11,7 +11,13 @@ import {
 } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+  useMatch
+} from 'react-router-dom';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { getIngredients } from '../../services/ingredients/actions';
@@ -50,6 +56,12 @@ const App = () => {
 
   const isLoading =
     isIngredientsLoading || isFeedsLoading || !isUserAuthChecked;
+
+  const feedOrderMatch = useMatch('/feed/:number');
+  const feedOrderNumber = feedOrderMatch && feedOrderMatch.params.number;
+  const profileOrderMatch = useMatch('/profile/orders/:number');
+  const profileOrderNumber =
+    profileOrderMatch && profileOrderMatch.params.number;
 
   return (
     <div className={styles.app}>
@@ -104,7 +116,6 @@ const App = () => {
                 </div>
               }
             />
-            // TODO: title
             <Route
               path='/profile/orders/:number'
               element={<ProtectedRoute component={<OrderInfo />} />}
@@ -116,7 +127,14 @@ const App = () => {
               <Route
                 path='/feed/:number'
                 element={
-                  <Modal title='Детали заказа' onClose={onModalClose}>
+                  <Modal
+                    title={
+                      feedOrderNumber
+                        ? `#${String(feedOrderNumber).padStart(6, '0')}`
+                        : 'Детали заказа'
+                    }
+                    onClose={onModalClose}
+                  >
                     <OrderInfo />
                   </Modal>
                 }
@@ -134,7 +152,14 @@ const App = () => {
                 element={
                   <ProtectedRoute
                     component={
-                      <Modal title='Детали заказа' onClose={onModalClose}>
+                      <Modal
+                        title={
+                          profileOrderNumber
+                            ? `#${String(profileOrderNumber).padStart(6, '0')}`
+                            : 'Детали заказа'
+                        }
+                        onClose={onModalClose}
+                      >
                         <OrderInfo />
                       </Modal>
                     }
