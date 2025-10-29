@@ -25,12 +25,18 @@ import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
 import { checkUserAuthentication } from '../../services/user/actions';
 import { ProtectedRoute } from '../protected-route/protected-route';
-import { getFeeds } from '../../services/feeds/actions';
+import { getFeeds, getOrder } from '../../services/feeds/actions';
 import { useSelector } from 'react-redux';
 import { isIngredientsLoadingSelector } from '../../services/ingredients/slice';
-import { isFeedsLoadingSelector } from '../../services/feeds/slice';
+import {
+  isFeedsLoadingSelector,
+  ordersSelector,
+  setSelectedOrder
+} from '../../services/feeds/slice';
 import { isAuthCheckedSelector } from '../../services/user/slice';
 import { Preloader } from '@ui';
+import { userOrdersSelector } from '../../services/order/slice';
+import { TOrder } from '@utils-types';
 
 const App = () => {
   const location = useLocation();
@@ -41,6 +47,11 @@ const App = () => {
   const isIngredientsLoading = useSelector(isIngredientsLoadingSelector);
   const isFeedsLoading = useSelector(isFeedsLoadingSelector);
   const isUserAuthChecked = useSelector(isAuthCheckedSelector);
+  const feedOrderMatch = useMatch('/feed/:number');
+  const feedOrderNumber = feedOrderMatch && feedOrderMatch.params.number;
+  const profileOrderMatch = useMatch('/profile/orders/:number');
+  const profileOrderNumber =
+    profileOrderMatch && profileOrderMatch.params.number;
 
   useEffect(() => {
     dispatch(checkUserAuthentication());
@@ -54,15 +65,26 @@ const App = () => {
     dispatch(getFeeds());
   }, []);
 
+  const orderNumber = feedOrderNumber || profileOrderNumber;
+  let orderData: TOrder | null = null;
+  if (orderNumber) {
+    const orders = /feed/.test(location.pathname)
+      ? useSelector(ordersSelector)
+      : useSelector(userOrdersSelector);
+    orderData =
+      orders.find((order) => order.number.toString() === orderNumber) || null;
+  }
+
+  useEffect(() => {
+    if (orderData) {
+      setSelectedOrder(orderData);
+    } else if (orderNumber) {
+      dispatch(getOrder(Number(orderNumber)));
+    }
+  });
+
   const isLoading =
     isIngredientsLoading || isFeedsLoading || !isUserAuthChecked;
-
-  const feedOrderMatch = useMatch('/feed/:number');
-  const feedOrderNumber = feedOrderMatch && feedOrderMatch.params.number;
-  const profileOrderMatch = useMatch('/profile/orders/:number');
-  const profileOrderNumber =
-    profileOrderMatch && profileOrderMatch.params.number;
-
   return (
     <div className={styles.app}>
       <AppHeader />

@@ -5,17 +5,14 @@ import { TIngredient } from '@utils-types';
 import { useSelector } from '../../services/store';
 import { ingredientsSelector } from '../../services/ingredients/slice';
 import { useLocation, useParams } from 'react-router-dom';
-import { ordersSelector } from '../../services/feeds/slice';
+import {
+  ordersSelector,
+  selectedOrderSelector
+} from '../../services/feeds/slice';
 import { userOrdersSelector } from '../../services/order/slice';
 
 export const OrderInfo: FC = () => {
-  const { number } = useParams();
-  const location = useLocation();
-  const orders = /feed/.test(location.pathname)
-    ? useSelector(ordersSelector)
-    : useSelector(userOrdersSelector);
-  console.log(orders[orders.length - 1]);
-  const orderData = orders.find((order) => order.number.toString() === number);
+  const orderData = useSelector(selectedOrderSelector);
 
   const ingredients = useSelector(ingredientsSelector) || [];
 

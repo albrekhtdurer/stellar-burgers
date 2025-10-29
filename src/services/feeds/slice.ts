@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { getFeeds, getOrder } from './actions';
 
@@ -23,7 +23,11 @@ const initialState: TFeedState = {
 export const feedsSlice = createSlice({
   name: 'feeds',
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedOrder(state, action: PayloadAction<TOrder>) {
+      state.selectedOrder = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getFeeds.pending, (state) => {
@@ -69,3 +73,5 @@ export const {
   isOrderLoadingSelector,
   selectedOrderSelector
 } = feedsSlice.selectors;
+
+export const { setSelectedOrder } = feedsSlice.actions;
