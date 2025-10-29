@@ -1,19 +1,23 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
-import { getFeeds } from './actions';
+import { getFeeds, getOrder } from './actions';
 
 type TFeedState = {
   orders: TOrder[];
   total: number;
   totalToday: number;
-  isLoading: boolean;
+  isLoadingFeeds: boolean;
+  selectedOrder: TOrder | null;
+  isLoadingOrder: boolean;
 };
 
 const initialState: TFeedState = {
   orders: [],
   total: 0,
   totalToday: 0,
-  isLoading: false
+  isLoadingFeeds: false,
+  selectedOrder: null,
+  isLoadingOrder: false
 };
 
 export const feedsSlice = createSlice({
@@ -23,10 +27,10 @@ export const feedsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getFeeds.pending, (state) => {
-        state.isLoading = true;
+        state.isLoadingFeeds = true;
       })
       .addCase(getFeeds.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isLoadingFeeds = false;
         const data = action.payload;
         state.orders = data.orders;
         state.total = data.total;
@@ -34,13 +38,26 @@ export const feedsSlice = createSlice({
       })
       .addCase(getFeeds.rejected, (state, action) => {
         console.log('Произошла ошибка ' + action.error);
+      })
+      .addCase(getOrder.pending, (state) => {
+        state.isLoadingOrder = true;
+        state.selectedOrder = null;
+      })
+      .addCase(getOrder.fulfilled, (state, action) => {
+        state.isLoadingOrder = false;
+        state.selectedOrder = action.payload.orders[0];
+      })
+      .addCase(getOrder.rejected, (state, action) => {
+        console.log('Произошла ошибка ' + action.error);
       });
   },
   selectors: {
-    isFeedsLoadingSelector: (state) => state.isLoading,
+    isFeedsLoadingSelector: (state) => state.isLoadingFeeds,
     ordersSelector: (state) => state.orders,
     totalSelector: (state) => state.total,
-    totalTodaySelector: (state) => state.totalToday
+    totalTodaySelector: (state) => state.totalToday,
+    isOrderLoadingSelector: (state) => state.isLoadingOrder,
+    selectedOrderSelector: (state) => state.selectedOrder
   }
 });
 
@@ -48,5 +65,7 @@ export const {
   ordersSelector,
   totalSelector,
   totalTodaySelector,
-  isFeedsLoadingSelector
+  isFeedsLoadingSelector,
+  isOrderLoadingSelector,
+  selectedOrderSelector
 } = feedsSlice.selectors;
