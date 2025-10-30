@@ -1,12 +1,39 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
-import { TIngredient } from '@utils-types';
-import { useSelector } from '../../services/store';
+import { TIngredient, TOrder } from '@utils-types';
+import { useDispatch, useSelector } from '../../services/store';
 import { ingredientsSelector } from '../../services/ingredients/slice';
-import { selectedOrderSelector } from '../../services/feeds/slice';
+import {
+  ordersSelector,
+  selectedOrderSelector,
+  setSelectedOrder
+} from '../../services/feeds/slice';
+import { useParams } from 'react-router-dom';
+import { userOrdersSelector } from '../../services/order/slice';
+import { getOrder } from '../../services/feeds/actions';
 
 export const OrderInfo: FC = () => {
+  const params = useParams();
+  const dispatch = useDispatch();
+  const orderNumber = params.number;
+  let orderFromFeed: TOrder | null = null;
+  const orders = /feed/.test(location.pathname)
+    ? useSelector(ordersSelector)
+    : useSelector(userOrdersSelector);
+  if (orderNumber) {
+    orderFromFeed =
+      orders.find((order) => order.number.toString() === orderNumber) || null;
+  }
+
+  useEffect(() => {
+    if (orderFromFeed) {
+      dispatch(setSelectedOrder(orderFromFeed));
+    } else if (orderNumber) {
+      dispatch(getOrder(Number(orderNumber)));
+    }
+  }, []);
+
   const orderData = useSelector(selectedOrderSelector);
 
   const ingredients = useSelector(ingredientsSelector) || [];

@@ -25,19 +25,12 @@ import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
 import { checkUserAuthentication } from '../../services/user/actions';
 import { ProtectedRoute } from '../protected-route/protected-route';
-import { getFeeds, getOrder } from '../../services/feeds/actions';
+import { getFeeds } from '../../services/feeds/actions';
 import { useSelector } from 'react-redux';
 import { isIngredientsLoadingSelector } from '../../services/ingredients/slice';
-import {
-  isFeedsLoadingSelector,
-  ordersSelector,
-  selectedOrderSelector,
-  setSelectedOrder
-} from '../../services/feeds/slice';
+import { isFeedsLoadingSelector } from '../../services/feeds/slice';
 import { isAuthCheckedSelector } from '../../services/user/slice';
 import { Preloader } from '@ui';
-import { userOrdersSelector } from '../../services/order/slice';
-import { TOrder } from '@utils-types';
 
 const App = () => {
   const location = useLocation();
@@ -65,24 +58,6 @@ const App = () => {
   useEffect(() => {
     dispatch(getFeeds());
   }, []);
-
-  const orderNumber = feedOrderNumber || profileOrderNumber;
-  let orderFromFeed: TOrder | null = null;
-  const orders = /feed/.test(location.pathname)
-    ? useSelector(ordersSelector)
-    : useSelector(userOrdersSelector);
-  if (orderNumber) {
-    orderFromFeed =
-      orders.find((order) => order.number.toString() === orderNumber) || null;
-  }
-
-  useEffect(() => {
-    if (orderFromFeed) {
-      dispatch(setSelectedOrder(orderFromFeed));
-    } else if (orderNumber) {
-      dispatch(getOrder(Number(orderNumber)));
-    }
-  });
 
   const isLoading =
     isIngredientsLoading || isFeedsLoading || !isUserAuthChecked;
