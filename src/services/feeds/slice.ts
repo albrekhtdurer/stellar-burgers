@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TOrder } from '@utils-types';
+import { TFeed, TOrder } from '@utils-types';
 import { getFeeds, getOrder } from './actions';
 
 type TFeedState = {
   orders: TOrder[];
   total: number;
   totalToday: number;
-  isLoadingFeeds: boolean;
+  isLoading: boolean;
   selectedOrder: TOrder | null;
   isLoadingOrder: boolean;
 };
@@ -15,7 +15,7 @@ const initialState: TFeedState = {
   orders: [],
   total: 0,
   totalToday: 0,
-  isLoadingFeeds: false,
+  isLoading: false,
   selectedOrder: null,
   isLoadingOrder: false
 };
@@ -31,10 +31,10 @@ export const feedsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getFeeds.pending, (state) => {
-        state.isLoadingFeeds = true;
+        state.isLoading = true;
       })
       .addCase(getFeeds.fulfilled, (state, action) => {
-        state.isLoadingFeeds = false;
+        state.isLoading = false;
         const data = action.payload;
         state.orders = data.orders;
         state.total = data.total;
@@ -56,7 +56,7 @@ export const feedsSlice = createSlice({
       });
   },
   selectors: {
-    isFeedsLoadingSelector: (state) => state.isLoadingFeeds,
+    isFeedsLoadingSelector: (state) => state.isLoading,
     ordersSelector: (state) => state.orders,
     totalSelector: (state) => state.total,
     totalTodaySelector: (state) => state.totalToday,
