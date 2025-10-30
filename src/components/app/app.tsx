@@ -31,6 +31,7 @@ import { isIngredientsLoadingSelector } from '../../services/ingredients/slice';
 import {
   isFeedsLoadingSelector,
   ordersSelector,
+  selectedOrderSelector,
   setSelectedOrder
 } from '../../services/feeds/slice';
 import { isAuthCheckedSelector } from '../../services/user/slice';
@@ -66,18 +67,18 @@ const App = () => {
   }, []);
 
   const orderNumber = feedOrderNumber || profileOrderNumber;
-  let orderData: TOrder | null = null;
+  let orderFromFeed: TOrder | null = null;
+  const orders = /feed/.test(location.pathname)
+    ? useSelector(ordersSelector)
+    : useSelector(userOrdersSelector);
   if (orderNumber) {
-    const orders = /feed/.test(location.pathname)
-      ? useSelector(ordersSelector)
-      : useSelector(userOrdersSelector);
-    orderData =
+    orderFromFeed =
       orders.find((order) => order.number.toString() === orderNumber) || null;
   }
 
   useEffect(() => {
-    if (orderData) {
-      setSelectedOrder(orderData);
+    if (orderFromFeed) {
+      dispatch(setSelectedOrder(orderFromFeed));
     } else if (orderNumber) {
       dispatch(getOrder(Number(orderNumber)));
     }

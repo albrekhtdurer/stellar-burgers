@@ -4,12 +4,7 @@ import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useSelector } from '../../services/store';
 import { ingredientsSelector } from '../../services/ingredients/slice';
-import { useLocation, useParams } from 'react-router-dom';
-import {
-  ordersSelector,
-  selectedOrderSelector
-} from '../../services/feeds/slice';
-import { userOrdersSelector } from '../../services/order/slice';
+import { selectedOrderSelector } from '../../services/feeds/slice';
 
 export const OrderInfo: FC = () => {
   const orderData = useSelector(selectedOrderSelector);
