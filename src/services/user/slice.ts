@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TOrder, TUser } from '@utils-types';
 import { registerUser, loginUser, updateUser, logoutUser } from './actions';
 
-type TUserState = {
+export type TUserState = {
   isAuthChecked: boolean;
   data: TUser | null;
 };

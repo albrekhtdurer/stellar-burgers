@@ -5,7 +5,7 @@ import {
   TIngredient
 } from '@utils-types';
 
-type TConstructorState = {
+export type TConstructorState = {
   items: TConstructorItems;
 };
 
