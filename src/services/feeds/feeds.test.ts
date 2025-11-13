@@ -7,6 +7,10 @@ describe('feedsReducer', () => {
     jest.restoreAllMocks();
   });
 
+  test('reducer корректно инициализируется', () => {
+    expect(feedsSlice.reducer(undefined, { type: '' })).toEqual(initialState);
+  });
+
   test('getFeeds - успешное получение ленты заказов', () => {
     const expectedState = {
       ...initialState,
