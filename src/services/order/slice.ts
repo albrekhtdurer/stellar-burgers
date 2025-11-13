@@ -40,7 +40,7 @@ export const orderSlice = createSlice({
     });
     builder.addCase(getUserOrders.rejected, (state, action) => {
       state.isLoadingOrders = false;
-      console.log('Произошла ошибка');
+      console.log('Произошла ошибка ' + action.error.message);
     });
 
     builder.addCase(sendOrder.pending, (state) => {
