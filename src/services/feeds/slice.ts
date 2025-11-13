@@ -11,7 +11,7 @@ export type TFeedState = {
   isLoadingOrder: boolean;
 };
 
-const initialState: TFeedState = {
+export const initialState: TFeedState = {
   orders: [],
   total: 0,
   totalToday: 0,
@@ -41,7 +41,7 @@ export const feedsSlice = createSlice({
         state.totalToday = data.totalToday;
       })
       .addCase(getFeeds.rejected, (state, action) => {
-        console.log('Произошла ошибка ' + action.error);
+        console.log('Произошла ошибка ' + action.error.message);
       })
       .addCase(getOrder.pending, (state) => {
         state.isLoadingOrder = true;
@@ -52,7 +52,7 @@ export const feedsSlice = createSlice({
         state.selectedOrder = action.payload.orders[0];
       })
       .addCase(getOrder.rejected, (state, action) => {
-        console.log('Произошла ошибка ' + action.error);
+        console.log('Произошла ошибка ' + action.error.message);
       });
   },
   selectors: {

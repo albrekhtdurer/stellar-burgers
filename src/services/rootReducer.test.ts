@@ -1,6 +1,6 @@
 import { expect, test, describe } from '@jest/globals';
 import { initialState as constructorInitState } from './constructor/constructor.mock';
-import { initialState as feedInitState } from './feeds/feeds.mock';
+import { initialState as feedInitState } from './feeds/slice';
 import { initialState as ingredientsInitState } from './ingredients/ingredients.mock';
 import { initialState as orderInitState } from './order/order.mock';
 import { initialState as userInitState } from './user/user.mock';
