@@ -7,7 +7,7 @@ export type TUserState = {
   data: TUser | null;
 };
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   isAuthChecked: false,
   data: null
 };

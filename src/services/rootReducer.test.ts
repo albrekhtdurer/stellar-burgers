@@ -3,7 +3,7 @@ import { initialState as constructorInitState } from './constructor/constructor.
 import { initialState as feedInitState } from './feeds/slice';
 import { initialState as ingredientsInitState } from './ingredients/slice';
 import { initialState as orderInitState } from './order/slice';
-import { initialState as userInitState } from './user/user.mock';
+import { initialState as userInitState } from './user/slice';
 import { reducer } from './rootReducer';
 
 describe('rootReducer', () => {
