@@ -1,4 +1,12 @@
-import { initialState, isOrdersLoadingSelector, orderModalDataSelector, orderRequestSelector, orderSlice, setOrderModalData, userOrdersSelector } from './slice';
+import {
+  initialState,
+  isOrdersLoadingSelector,
+  orderModalDataSelector,
+  orderRequestSelector,
+  orderSlice,
+  setOrderModalData,
+  userOrdersSelector
+} from './slice';
 import { mockUserOrdersData, mockSentOrderData } from './order.mock';
 import { getUserOrders, sendOrder } from './actions';
 import { configureStore } from '@reduxjs/toolkit';
