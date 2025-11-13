@@ -50,9 +50,10 @@ export const orderSlice = createSlice({
       state.orderRequest = false;
       state.orderModalData = action.payload.order;
     });
-    builder.addCase(sendOrder.rejected, (state) => {
+    builder.addCase(sendOrder.rejected, (state, action) => {
       state.orderRequest = false;
       state.orderModalData = null;
+      console.log('Произошла ошибка ' + action.error.message);
     });
   }
 });
