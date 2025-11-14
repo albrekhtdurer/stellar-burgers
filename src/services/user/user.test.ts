@@ -8,6 +8,7 @@ import {
 } from './slice';
 import { registerUser, loginUser, updateUser, logoutUser } from './actions';
 import { TUser } from '@utils-types';
+import { configureStore } from '@reduxjs/toolkit';
 
 describe('userSlice', () => {
   const userData: TUser = {
@@ -88,5 +89,34 @@ describe('userSlice', () => {
     };
     const state = userSlice.reducer(prevState, action);
     expect(state).toEqual(initialState);
+  });
+
+  test('устанавливаем isAuthChecked', () => {
+    const state = userSlice.reducer(initialState, setIsAuthChecked(true));
+    expect(state).toEqual({ ...initialState, isAuthChecked: true });
+  });
+
+  test('устанавливаем данные пользователя', () => {
+    const state = userSlice.reducer(initialState, setUser(userData));
+    expect(state).toEqual({ ...initialState, data: userData });
+  });
+
+  const store = configureStore({
+    reducer: {
+      user: userSlice.reducer
+    },
+    preloadedState: {
+      user: { ...initialState, data: userData }
+    }
+  });
+
+  test('селектор флага проверки авторизации', () => {
+    const selectedIsAuthChecked = isAuthCheckedSelector(store.getState());
+    expect(selectedIsAuthChecked).toBe(false);
+  });
+
+  test('селектор юзера', () => {
+    const selectedUser = userSelector(store.getState());
+    expect(selectedUser).toEqual(userData);
   });
 });
