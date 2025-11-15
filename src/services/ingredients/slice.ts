@@ -2,7 +2,7 @@ import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 import { getIngredients } from './actions';
 
-type TIngredientsState = {
+export type TIngredientsState = {
   ingredients: TIngredient[] | null;
   isLoading: boolean;
   constructorItems: TConstructorItems;
@@ -13,7 +13,7 @@ type TConstructorItems = {
   ingredients: TConstructorIngredient[];
 };
 
-const initialState: TIngredientsState = {
+export const initialState: TIngredientsState = {
   ingredients: null,
   isLoading: false,
   constructorItems: { bun: null, ingredients: [] }
@@ -34,7 +34,7 @@ export const ingredientsSlice = createSlice({
       })
       .addCase(getIngredients.rejected, (state, action) => {
         state.isLoading = false;
-        console.log('Произошла ошибка: ' + action.error);
+        console.log('Произошла ошибка ' + action.error.message);
       })
       .addCase(getIngredients.fulfilled, (state, action) => {
         state.isLoading = false;
