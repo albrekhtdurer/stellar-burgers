@@ -23,7 +23,7 @@ export const BurgerConstructorElementUI: FC<BurgerConstructorElementUIProps> =
         />
         <div
           className={`${styles.element_fullwidth} ml-2`}
-          data-cy={`element_${ingredient._id}`}
+          data-cy={`ingredient_${ingredient._id}`}
         >
           <ConstructorElement
             text={ingredient.name}

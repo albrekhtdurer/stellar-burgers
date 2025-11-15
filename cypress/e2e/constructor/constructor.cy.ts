@@ -14,7 +14,7 @@ describe('тестируем работу с ингредиентами и ко�
     const id = '2';
     const button = cy.get(`[data-cy=add_${id}]`).find('button');
     button.click();
-    const constructorElement = cy.get(`[data-cy=element_${id}]`);
+    const constructorElement = cy.get(`[data-cy=ingredient_${id}]`);
     constructorElement.contains(name);
   });
   it('добавление булок в конструктор', () => {
