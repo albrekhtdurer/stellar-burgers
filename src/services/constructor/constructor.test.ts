@@ -13,6 +13,21 @@ import {
 } from './constructor.mock';
 
 describe('burgerConstructorSlice', () => {
+  const ingredientCrystals = {
+    _id: '643d69a5c3f7b9001cfa0948',
+    name: 'Кристаллы марсианских альфа-сахаридов',
+    type: 'main',
+    proteins: 234,
+    fat: 432,
+    carbohydrates: 111,
+    calories: 189,
+    price: 762,
+    image: 'https://code.s3.yandex.net/react/code/core.png',
+    image_mobile: 'https://code.s3.yandex.net/react/code/core-mobile.png',
+    image_large: 'https://code.s3.yandex.net/react/code/core-large.png',
+    id: 'PX4jQCJIjsElnWShYfcxv'
+  };
+
   test('добавляем ингредиент', () => {
     const ingredientToAdd = {
       _id: '643d69a5c3f7b9001cfa0944',
@@ -42,45 +57,18 @@ describe('burgerConstructorSlice', () => {
       }
     });
   });
+
   test('удаляем ингредиент', () => {
-    const ingredientToRemove = {
-      _id: '643d69a5c3f7b9001cfa0948',
-      name: 'Кристаллы марсианских альфа-сахаридов',
-      type: 'main',
-      proteins: 234,
-      fat: 432,
-      carbohydrates: 111,
-      calories: 189,
-      price: 762,
-      image: 'https://code.s3.yandex.net/react/code/core.png',
-      image_mobile: 'https://code.s3.yandex.net/react/code/core-mobile.png',
-      image_large: 'https://code.s3.yandex.net/react/code/core-large.png',
-      id: 'PX4jQCJIjsElnWShYfcxv'
-    };
     const newState = burgerConstructorSlice.reducer(
       defaultState,
-      removeConstructorItem(ingredientToRemove)
+      removeConstructorItem(ingredientCrystals)
     );
     expect(newState).toEqual(stateWithDeletedCrystals);
   });
   test('двигаем ингредиент вверх', () => {
-    const ingredientToMoveUp = {
-      _id: '643d69a5c3f7b9001cfa0948',
-      name: 'Кристаллы марсианских альфа-сахаридов',
-      type: 'main',
-      proteins: 234,
-      fat: 432,
-      carbohydrates: 111,
-      calories: 189,
-      price: 762,
-      image: 'https://code.s3.yandex.net/react/code/core.png',
-      image_mobile: 'https://code.s3.yandex.net/react/code/core-mobile.png',
-      image_large: 'https://code.s3.yandex.net/react/code/core-large.png',
-      id: 'PX4jQCJIjsElnWShYfcxv'
-    };
     const newState = burgerConstructorSlice.reducer(
       defaultState,
-      moveConstructorItemUp(ingredientToMoveUp)
+      moveConstructorItemUp(ingredientCrystals)
     );
     expect(newState).toEqual(stateWithCrystalsMovedUp);
   });
