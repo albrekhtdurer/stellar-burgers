@@ -10,7 +10,7 @@ describe('тестируем оформление заказа', () => {
   });
 
   it('оформление заказа', () => {
-    cy.visit('http://localhost:4000');
+    cy.visit('/');
     const bun = { name: 'Краторная булка N-200i', id: '1' };
     const ingredients = [
       { name: 'Биокотлета из марсианской Магнолии', id: '2' },

@@ -6,10 +6,10 @@ describe('тестируем работу с ингредиентами и ко�
 
     window.localStorage.setItem('refreshToken', JSON.stringify('test-myToken'));
     cy.setCookie('accessToken', 'test-myAccessToken');
+    cy.visit('/');
   });
 
   it('добавление начинки в конструктор', () => {
-    cy.visit('http://localhost:4000');
     const name = 'Биокотлета из марсианской Магнолии';
     const id = '2';
     const button = cy.get(`[data-cy=add_${id}]`).find('button');
@@ -18,7 +18,6 @@ describe('тестируем работу с ингредиентами и ко�
     constructorElement.contains(name);
   });
   it('добавление булок в конструктор', () => {
-    cy.visit('http://localhost:4000');
     const name = 'Краторная булка N-200i';
     const id = '1';
     const button = cy.get(`[data-cy=add_${id}]`).find('button');
@@ -29,7 +28,6 @@ describe('тестируем работу с ингредиентами и ко�
     bottomBun.contains(name);
   });
   it('работа с модальным окном ингредиента - открытие и закрытие по кнопке', () => {
-    cy.visit('http://localhost:4000');
     const id = '2';
     const linkToModal = cy.get(`[data-cy=open_modal_${id}]`);
     linkToModal.click();
@@ -40,7 +38,6 @@ describe('тестируем работу с ингредиентами и ко�
     cy.get('[data-cy=modal]').should('not.exist');
   });
   it('работа с модальным окном ингредиента - открытие и закрытие по клику на оверлей', () => {
-    cy.visit('http://localhost:4000');
     const id = '2';
     const linkToModal = cy.get(`[data-cy=open_modal_${id}]`);
     linkToModal.click();
