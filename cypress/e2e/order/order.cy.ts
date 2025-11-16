@@ -27,12 +27,11 @@ describe('тестируем оформление заказа', () => {
     const orderButton = cy.get('[data-cy=order_button]').find('button');
     orderButton.click();
 
-    const modal = cy.get('[data-cy=modal]');
-    modal.should('be.visible');
-    modal.contains(orderNumber);
+    cy.get('[data-cy=modal]').as('modal').should('be.visible');
+    cy.get('@modal').contains(orderNumber);
     const closeButton = cy.get('[data-cy=modal_close]');
     closeButton.click();
-    cy.get('[data-cy=modal]').should('not.exist');
+    cy.get('@modal').should('not.exist');
     cy.get(`[data-cy=bun_top_${bun.id}]`).should('not.exist');
     cy.get(`[data-cy=bun_bottom_${bun.id}]`).should('not.exist');
     ingredients.forEach((ingredient) => {
