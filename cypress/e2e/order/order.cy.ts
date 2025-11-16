@@ -17,7 +17,7 @@ describe('тестируем оформление заказа', () => {
       { name: 'Говяжий метеорит (отбивная)', id: '7' },
       { name: 'Соус Spicy-X', id: '4' }
     ];
-    const order_number = '94265';
+    const orderNumber = '94265';
 
     cy.get(`[data-cy=add_${bun.id}]`).find('button').click();
     ingredients.forEach((ingredient) => {
@@ -29,7 +29,7 @@ describe('тестируем оформление заказа', () => {
 
     const modal = cy.get('[data-cy=modal]');
     modal.should('be.visible');
-    modal.contains(order_number);
+    modal.contains(orderNumber);
     const closeButton = cy.get('[data-cy=modal_close]');
     closeButton.click();
     cy.get('[data-cy=modal]').should('not.exist');
