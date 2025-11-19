@@ -4,44 +4,29 @@ import {
   addConstructorItem,
   removeConstructorItem,
   moveConstructorItemUp,
-  moveConstructorItemDown
+  moveConstructorItemDown,
+  TConstructorState
 } from './slice';
-import {
-  defaultState,
-  stateWithDeletedCrystals,
-  stateWithCrystalsMovedUp
-} from './constructor.mock';
+import { mockIngredientsData } from '../ingredients/ingredients.mock';
 
 describe('burgerConstructorSlice', () => {
-  const ingredientCrystals = {
-    _id: '643d69a5c3f7b9001cfa0948',
-    name: 'Кристаллы марсианских альфа-сахаридов',
-    type: 'main',
-    proteins: 234,
-    fat: 432,
-    carbohydrates: 111,
-    calories: 189,
-    price: 762,
-    image: 'https://code.s3.yandex.net/react/code/core.png',
-    image_mobile: 'https://code.s3.yandex.net/react/code/core-mobile.png',
-    image_large: 'https://code.s3.yandex.net/react/code/core-large.png',
-    id: 'PX4jQCJIjsElnWShYfcxv'
+  const defaultState: TConstructorState = {
+    items: {
+      bun: { ...mockIngredientsData[0], id: '1' },
+      ingredients: [
+        { ...mockIngredientsData[1], id: '2' },
+        { ...mockIngredientsData[2], id: '3' },
+        { ...mockIngredientsData[6], id: '4' },
+        { ...mockIngredientsData[12], id: '5' },
+        { ...mockIngredientsData[4], id: '6' }
+      ]
+    }
   };
 
+  const indexToMove = 3;
+
   test('добавляем ингредиент', () => {
-    const ingredientToAdd = {
-      _id: '643d69a5c3f7b9001cfa0944',
-      name: 'Соус традиционный галактический',
-      type: 'sauce',
-      proteins: 42,
-      fat: 24,
-      carbohydrates: 42,
-      calories: 99,
-      price: 15,
-      image: 'https://code.s3.yandex.net/react/code/sauce-03.png',
-      image_mobile: 'https://code.s3.yandex.net/react/code/sauce-03-mobile.png',
-      image_large: 'https://code.s3.yandex.net/react/code/sauce-03-large.png'
-    };
+    const ingredientToAdd = mockIngredientsData[8];
     const newState = burgerConstructorSlice.reducer(
       defaultState,
       addConstructorItem(ingredientToAdd)
@@ -59,38 +44,59 @@ describe('burgerConstructorSlice', () => {
   });
 
   test('удаляем ингредиент', () => {
+    const indexToDelete = 2;
     const newState = burgerConstructorSlice.reducer(
       defaultState,
-      removeConstructorItem(ingredientCrystals)
+      removeConstructorItem(defaultState.items.ingredients[indexToDelete])
     );
-    expect(newState).toEqual(stateWithDeletedCrystals);
+    const expectedState = {
+      ...defaultState,
+      items: {
+        ...defaultState.items,
+        ingredients: [
+          ...defaultState.items.ingredients.slice(0, indexToDelete),
+          ...defaultState.items.ingredients.slice(indexToDelete + 1)
+        ]
+      }
+    };
+    expect(newState).toEqual(expectedState);
   });
   test('двигаем ингредиент вверх', () => {
-    const newState = burgerConstructorSlice.reducer(
-      defaultState,
-      moveConstructorItemUp(ingredientCrystals)
-    );
-    expect(newState).toEqual(stateWithCrystalsMovedUp);
-  });
-  test('двигаем ингредиент вниз', () => {
-    const ingredientToMoveDown = {
-      _id: '643d69a5c3f7b9001cfa0940',
-      name: 'Говяжий метеорит (отбивная)',
-      type: 'main',
-      proteins: 800,
-      fat: 800,
-      carbohydrates: 300,
-      calories: 2674,
-      price: 3000,
-      image: 'https://code.s3.yandex.net/react/code/meat-04.png',
-      image_mobile: 'https://code.s3.yandex.net/react/code/meat-04-mobile.png',
-      image_large: 'https://code.s3.yandex.net/react/code/meat-04-large.png',
-      id: 'li6D9uuLKkrZDTpcUqsAY'
+    const expectedState = {
+      ...defaultState,
+      items: {
+        ...defaultState.items,
+        ingredients: [
+          ...defaultState.items.ingredients.slice(0, indexToMove - 1),
+          { ...defaultState.items.ingredients[indexToMove] },
+          { ...defaultState.items.ingredients[indexToMove - 1] },
+          ...defaultState.items.ingredients.slice(indexToMove + 1)
+        ]
+      }
     };
     const newState = burgerConstructorSlice.reducer(
       defaultState,
-      moveConstructorItemDown(ingredientToMoveDown)
+      moveConstructorItemUp(defaultState.items.ingredients[indexToMove])
     );
-    expect(newState).toEqual(stateWithCrystalsMovedUp);
+    expect(newState).toEqual(expectedState);
+  });
+  test('двигаем ингредиент вниз', () => {
+    const expectedState = {
+      ...defaultState,
+      items: {
+        ...defaultState.items,
+        ingredients: [
+          ...defaultState.items.ingredients.slice(0, indexToMove),
+          { ...defaultState.items.ingredients[indexToMove + 1] },
+          { ...defaultState.items.ingredients[indexToMove] },
+          ...defaultState.items.ingredients.slice(indexToMove + 2)
+        ]
+      }
+    };
+    const newState = burgerConstructorSlice.reducer(
+      defaultState,
+      moveConstructorItemDown(defaultState.items.ingredients[indexToMove])
+    );
+    expect(newState).toEqual(expectedState);
   });
 });
