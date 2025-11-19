@@ -1,3 +1,12 @@
+import {
+  addButtonSelector,
+  bottomBunSelector,
+  ingredientSelector,
+  modalCloseButtonSelector,
+  modalSelector,
+  topBunSelector
+} from '../constants';
+
 describe('тестируем оформление заказа', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/ingredients', { fixture: 'ingredients.json' });
@@ -19,23 +28,23 @@ describe('тестируем оформление заказа', () => {
     ];
     const orderNumber = '94265';
 
-    cy.get(`[data-cy=add_${bun.id}]`).find('button').click();
+    cy.get(addButtonSelector(bun.id)).find('button').click();
     ingredients.forEach((ingredient) => {
-      cy.get(`[data-cy=add_${ingredient.id}]`).find('button').click();
+      cy.get(addButtonSelector(ingredient.id)).find('button').click();
     });
 
     const orderButton = cy.get('[data-cy=order_button]').find('button');
     orderButton.click();
 
-    cy.get('[data-cy=modal]').as('modal').should('be.visible');
+    cy.get(modalSelector).as('modal').should('be.visible');
     cy.get('@modal').contains(orderNumber);
-    const closeButton = cy.get('[data-cy=modal_close]');
+    const closeButton = cy.get(modalCloseButtonSelector);
     closeButton.click();
     cy.get('@modal').should('not.exist');
-    cy.get(`[data-cy=bun_top_${bun.id}]`).should('not.exist');
-    cy.get(`[data-cy=bun_bottom_${bun.id}]`).should('not.exist');
+    cy.get(topBunSelector(bun.id)).should('not.exist');
+    cy.get(bottomBunSelector(bun.id)).should('not.exist');
     ingredients.forEach((ingredient) => {
-      cy.get(`[data-cy=ingredient_${ingredient.id}]`).should('not.exist');
+      cy.get(ingredientSelector(ingredient.id)).should('not.exist');
     });
   });
 });
