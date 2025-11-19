@@ -33,13 +33,13 @@ describe('тестируем оформление заказа', () => {
       cy.get(addButtonSelector(ingredient.id)).find('button').click();
     });
 
-    const orderButton = cy.get('[data-cy=order_button]').find('button');
-    orderButton.click();
+    cy.get('[data-cy=order_button]').find('button').as('orderButton');
+    cy.get('@orderButton').click();
 
     cy.get(modalSelector).as('modal').should('be.visible');
     cy.get('@modal').contains(orderNumber);
-    const closeButton = cy.get(modalCloseButtonSelector);
-    closeButton.click();
+    cy.get(modalCloseButtonSelector).as('modalCloseButton');
+    cy.get('@modalCloseButton').click();
     cy.get('@modal').should('not.exist');
     cy.get(topBunSelector(bun.id)).should('not.exist');
     cy.get(bottomBunSelector(bun.id)).should('not.exist');
