@@ -5,11 +5,11 @@ import {
   TIngredient
 } from '@utils-types';
 
-type TConstructorState = {
+export type TConstructorState = {
   items: TConstructorItems;
 };
 
-const initialState: TConstructorState = {
+export const initialState: TConstructorState = {
   items: { bun: null, ingredients: [] }
 };
 
