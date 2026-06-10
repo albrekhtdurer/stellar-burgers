@@ -2,14 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { getUserOrders, sendOrder } from './actions';
 
-type TOrderState = {
+export type TOrderState = {
   orders: TOrder[];
   isLoadingOrders: boolean;
   orderRequest: boolean;
   orderModalData: TOrder | null;
 };
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
   orders: [],
   orderRequest: false,
   isLoadingOrders: false,
@@ -40,7 +40,7 @@ export const orderSlice = createSlice({
     });
     builder.addCase(getUserOrders.rejected, (state, action) => {
       state.isLoadingOrders = false;
-      console.log('Произошла ошибка');
+      console.log('Произошла ошибка ' + action.error.message);
     });
 
     builder.addCase(sendOrder.pending, (state) => {
@@ -50,9 +50,10 @@ export const orderSlice = createSlice({
       state.orderRequest = false;
       state.orderModalData = action.payload.order;
     });
-    builder.addCase(sendOrder.rejected, (state) => {
+    builder.addCase(sendOrder.rejected, (state, action) => {
       state.orderRequest = false;
       state.orderModalData = null;
+      console.log('Произошла ошибка ' + action.error.message);
     });
   }
 });

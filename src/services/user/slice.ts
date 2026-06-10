@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TOrder, TUser } from '@utils-types';
 import { registerUser, loginUser, updateUser, logoutUser } from './actions';
 
-type TUserState = {
+export type TUserState = {
   isAuthChecked: boolean;
   data: TUser | null;
 };
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   isAuthChecked: false,
   data: null
 };
@@ -38,7 +38,7 @@ export const userSlice = createSlice({
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.isAuthChecked = true;
-      console.log('Произошла ошибка: ' + action.error);
+      console.log('Произошла ошибка: ' + action.error.message);
     });
     builder.addCase(updateUser.fulfilled, (state, action) => {
       state.data = action.payload.user;
