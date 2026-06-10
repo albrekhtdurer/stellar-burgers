@@ -1,20 +1,25 @@
 # Stellar Burgers
 
-Учебный проект: функциональность SPA-приложения космической бургерной.
+Single-page application for a space-themed burger place. This is an educational project.
 
-В рамках проекта реализованы:
-* Настройка маршрутизации: задание роутов, реализация компонента защищенного маршрута
-* Настройка хранилища данных с помощью Redux и RTK: созданы слайсы и асинхронные экшны для получения данных и управления ими, в т.ч.: получение ингредиентов бургеров, получение ленты заказов, логин пользователя
-* Данные встроены в компоненты слоя отображения
+## Features
 
-[Макет](<https://www.figma.com/file/vIywAvqfkOIRWGOkfOnReY/React-Fullstack_-Проектные-задачи-(3-месяца)_external_link?type=design&node-id=0-1&mode=design>)
+The project was built on top of an existing codebase. I implemented the following features:
 
-## Запуск приложения
+- **Routing**: added routes and developed a React component for a protected route (available only to authorized users).
+- **Data storage with Redux and Redux Toolkit**: created slices and actions for retrieving and managing data, including burger ingredients, order feed, and auth/user data.
+- **Data integrated into view-layer components**: data is embedded directly into the components of the display layer.
+- **Unit tests** with Jest.
+- **End-to-end (E2E) tests** with Cypress.
 
-Запустить команду
+[Layout](<https://www.figma.com/file/vIywAvqfkOIRWGOkfOnReY/React-Fullstack_-Проектные-задачи-(3-месяца)_external_link?type=design&node-id=0-1&mode=design>)
 
-```
+## Application launch
+
+Run the following script:
+
+```bash
 npm run start
 ```
 
-Приложение будет доступно по адпесу `http://localhost:4000/`
+The application will be available at `http://localhost:4000/`.
